@@ -6,7 +6,7 @@ const MHM_snapper = () => {
     const snappers = MHM_items().snappers,
           mainSnapper = document.querySelector('[data-mhm-offset]'),
           offsetHeightElement = document.querySelector(mainSnapper.getAttribute('data-mhm-offset')),
-          offsetHeight = offsetHeightElement.offsetHeight
+          offsetHeight = offsetHeightElement ? offsetHeightElement.offsetHeight : 0
 
     snappers.forEach(snapper => {
         const snappersItems = snapper.querySelectorAll('[data-mhm-target]')
@@ -17,9 +17,9 @@ const MHM_snapper = () => {
                       targetPosition = target ? target.getBoundingClientRect().top : 0
 
                 window.scrollTo({
-                    top: isFixed(offsetHeightElement) ?
-                    Math.floor(window.pageYOffset + targetPosition - offsetHeight)
-                    : Math.floor(window.pageYOffset + targetPosition),
+                    top: !offsetHeightElement ? Math.floor(window.pageYOffset + targetPosition)
+                         : isFixed(offsetHeightElement) ? Math.floor(window.pageYOffset + targetPosition - offsetHeight)
+                         : Math.floor(window.pageYOffset + targetPosition),
                     behavior: "smooth"
                 })
 
