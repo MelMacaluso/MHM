@@ -1,14 +1,12 @@
 import MHM from './src/main'
 
-(()=>{
-    // Wait for DOM to be fully loaded
-    document.addEventListener('DOMContentLoaded', ()=> {
-
-    // New class instance init
+(() => {
+  // Wait for DOM to be fully loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    /* eslint-disable no-new */
     new MHM({
-        first: 'wow',
-        third: ''
-      })
-
+      first: 'wow',
+      third: ''
     })
+  })
 })()
