@@ -122,6 +122,8 @@ export default class MHM {
   scroller () {
     let currentSection = '0'
     const sections = this.elements.scrollers.querySelectorAll('[data-mhm-scroll-section]'),
+      offsetElement = document.querySelector(this.elements.scrollers.getAttribute('data-mhm-scroll-offset-element')),
+      offset = offsetElement ? offsetElement.clientHeight : 0,
       arrows = document.querySelectorAll('[data-mhm-scroll-arrow]'),
       lastSection = sections.length - 1,
       arrowUp = document.querySelector('[data-mhm-scroll-arrow="up"]'),
@@ -132,7 +134,7 @@ export default class MHM {
           sectionToScrollTo = document.querySelector(`[data-mhm-scroll-section="${sectionToScrollToID}"]`),
           sectionToScrollToScrollY = sectionToScrollTo.getBoundingClientRect().top
         window.scrollTo({
-          top: sectionToScrollToScrollY + window.scrollY,
+          top: sectionToScrollToScrollY + window.scrollY - offset,
           behavior: 'smooth'
         })
       },
