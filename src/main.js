@@ -44,7 +44,8 @@ export default class MHM {
   invokeIfNeeded (elementAndFns) {
     elementAndFns.forEach(elementAndFn => {
       const [el, fn] = elementAndFn
-      if (el.length || el) {
+
+      if (el && el.length !== 0) {
         this.methodsLoaded.push(fn.name)
         return fn.apply(this)
       }
@@ -133,6 +134,7 @@ export default class MHM {
           sectionToScrollToID = up ? Number(currentSection) - 1 : Number(currentSection) + 1,
           sectionToScrollTo = document.querySelector(`[data-mhm-scroll-section="${sectionToScrollToID}"]`),
           sectionToScrollToScrollY = sectionToScrollTo.getBoundingClientRect().top
+
         window.scrollTo({
           top: sectionToScrollToScrollY + window.scrollY - offset,
           behavior: 'smooth'
@@ -149,7 +151,7 @@ export default class MHM {
         },
         updateCurrentSection: e => {
           // Update currentSection
-          if (e[0].intersectionRatio >= 0.75) {
+          if (e[0].intersectionRatio >= 0.5) {
             currentSection = e[0].target.getAttribute('data-mhm-scroll-section')
           }
           // Toggle Arrows conditionally to first/last section
@@ -170,7 +172,7 @@ export default class MHM {
     })
     // Add click listener to arrows
     arrows.forEach(arrow => {
-      arrow.addEventListener('click', e => jumpTo(e.target))
+      arrow.addEventListener('click', e => jumpTo(arrow))
     })
     // Populate sections id dynamically
     sections.forEach((section, i) => populateSectionId(section, i))
