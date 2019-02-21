@@ -138,6 +138,9 @@ export default class MHM {
           behavior: 'smooth'
         })
       },
+      populateSectionId = (section, i) => {
+        section.setAttribute('data-mhm-scroll-section', i)
+      },
       observerProps = {
         opts: {
           root: null,
@@ -160,12 +163,16 @@ export default class MHM {
           }
         }
       }
+    // Attach obsever to each section
     sections.forEach(section => {
       const obs = new window.IntersectionObserver(observerProps.updateCurrentSection, observerProps.opts)
       obs.observe(section)
     })
+    // Add click listener to arrows
     arrows.forEach(arrow => {
       arrow.addEventListener('click', e => jumpTo(e.target))
     })
+    // Populate sections id dynamically
+    sections.forEach((section, i) => populateSectionId(section, i))
   }
 }
