@@ -1,7 +1,7 @@
 {
   "name": "@melmacaluso/mhm",
   "description": "tl;dr: MHM.js is a lightweight utility framework that streamlines simple tasks without the need to write javascript working through your html codebase.",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": {
     "name": "Mel Macaluso"
   },
