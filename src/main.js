@@ -121,60 +121,77 @@ export default class MHM {
   }
 
   scroller () {
-    let currentSection = '0'
+    let currentSection = '1'
     const sections = this.elements.scrollers.querySelectorAll('[data-mhm-scroll-section]'),
       offsetElement = document.querySelector(this.elements.scrollers.getAttribute('data-mhm-scroll-offset-element')),
       offset = offsetElement ? offsetElement.clientHeight : 0,
       arrows = document.querySelectorAll('[data-mhm-scroll-arrow]'),
-      lastSection = sections.length - 1,
+      lastSection = sections.length,
       arrowUp = document.querySelector('[data-mhm-scroll-arrow="up"]'),
       arrowDown = document.querySelector('[data-mhm-scroll-arrow="down"]'),
-      jumpTo = arrow => {
-        const up = arrow.getAttribute('data-mhm-scroll-arrow') === 'up',
-          sectionToScrollToID = up ? Number(currentSection) - 1 : Number(currentSection) + 1,
-          sectionToScrollTo = document.querySelector(`[data-mhm-scroll-section="${sectionToScrollToID}"]`),
-          sectionToScrollToScrollY = sectionToScrollTo.getBoundingClientRect().top
+      setCurrentSection = () => {
+        sections.forEach(section => {
+          const distanceFromTop = section.getBoundingClientRect().top - offset + window.scrollY,
+            sectionHeight = section.clientHeight
+          // Update current section with the next one when going beyond 75% of the height of the section
+          if (distanceFromTop - (sectionHeight * 0.25) <= window.scrollY) {
+            currentSection = section.getAttribute('data-mhm-scroll-section')
+          }
 
+          // DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG
+          document.querySelector('.header__brand a').innerHTML = currentSection
+          // DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG
+        })
+        debouncedToggleArrows()
+      },
+      jumpTo = arrow => {
+        const direction = arrow.getAttribute('data-mhm-scroll-arrow'),
+          down = direction === 'down',
+          up = direction === 'up'
+        if (down && Number(currentSection) !== lastSection) {
+          currentSection = `${Number(currentSection) + 1}`
+        } else if (up && Number(currentSection) !== 1) {
+          currentSection = `${Number(currentSection) - 1}`
+        }
         window.scrollTo({
-          top: sectionToScrollToScrollY + window.scrollY - offset,
+          top: document.querySelector(`[data-mhm-scroll-section="${currentSection}"]`)
+            .getBoundingClientRect().top - offset + window.scrollY,
           behavior: 'smooth'
         })
       },
+      toggleArrows = () => {
+        console.log('arrowstoggled')
+        if (Number(currentSection) === 1) {
+          arrowUp.style.opacity = 0
+        } else if (Number(currentSection) === lastSection) {
+          arrowDown.style.opacity = 0
+        } else {
+          arrowUp.style.opacity = 1
+          arrowDown.style.opacity = 1
+        }
+      },
+      debouncedToggleArrows = this.debounce(toggleArrows, 250),
       populateSectionId = (section, i) => {
         section.setAttribute('data-mhm-scroll-section', i)
-      },
-      observerProps = {
-        opts: {
-          root: null,
-          rootMargin: '0px',
-          threshold: 0.75
-        },
-        updateCurrentSection: e => {
-          // Update currentSection
-          if (e[0].intersectionRatio >= 0.5) {
-            currentSection = e[0].target.getAttribute('data-mhm-scroll-section')
-          }
-          // Toggle Arrows conditionally to first/last section
-          if (Number(currentSection) === lastSection) {
-            arrowDown.style.display = 'none'
-          } else if (Number(currentSection) === 0) {
-            arrowUp.style.display = 'none'
-          } else {
-            arrowUp.style.display = 'block'
-            arrowDown.style.display = 'block'
-          }
-        }
       }
-    // Attach obsever to each section
-    sections.forEach(section => {
-      const obs = new window.IntersectionObserver(observerProps.updateCurrentSection, observerProps.opts)
-      obs.observe(section)
-    })
+    // Display/Hide arrows on load
+    window.addEventListener('DOMContentLoaded', () => toggleArrows())
+    // Debounced current section updater
+    window.addEventListener('scroll', () => setCurrentSection())
     // Add click listener to arrows
     arrows.forEach(arrow => {
       arrow.addEventListener('click', e => jumpTo(arrow))
     })
     // Populate sections id dynamically
-    sections.forEach((section, i) => populateSectionId(section, i))
+    sections.forEach((section, i) => populateSectionId(section, i + 1))
+  }
+  debounce (func, wait = 100) {
+    let timeout
+    return function (...args) {
+      clearTimeout(timeout)
+      timeout = setTimeout(() => {
+        func.apply(this, args)
+      }, wait)
+    }
   }
 }
