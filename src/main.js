@@ -139,7 +139,7 @@ export default class MHM {
           }
 
           // DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG
-          document.querySelector('.header__brand a').innerHTML = currentSection
+          // document.querySelector('.header__brand a').innerHTML = currentSection
           // DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG
         })
         debouncedToggleArrows()
