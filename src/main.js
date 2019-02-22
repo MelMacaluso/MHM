@@ -142,7 +142,7 @@ export default class MHM {
           // document.querySelector('.header__brand a').innerHTML = currentSection
           // DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG
         })
-        debouncedToggleArrows()
+        toggleArrows()
       },
       jumpTo = arrow => {
         const direction = arrow.getAttribute('data-mhm-scroll-arrow'),
@@ -170,7 +170,6 @@ export default class MHM {
           arrowDown.style.opacity = 1
         }
       },
-      debouncedToggleArrows = this.debounce(toggleArrows, 250),
       populateSectionId = (section, i) => {
         section.setAttribute('data-mhm-scroll-section', i)
       }
@@ -184,14 +183,5 @@ export default class MHM {
     })
     // Populate sections id dynamically
     sections.forEach((section, i) => populateSectionId(section, i + 1))
-  }
-  debounce (func, wait = 100) {
-    let timeout
-    return function (...args) {
-      clearTimeout(timeout)
-      timeout = setTimeout(() => {
-        func.apply(this, args)
-      }, wait)
-    }
   }
 }
