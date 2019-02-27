@@ -160,7 +160,6 @@ export default class MHM {
         })
       },
       toggleArrows = () => {
-        console.log('arrowstoggled')
         if (Number(currentSection) === 1) {
           arrowUp.style.opacity = 0
         } else if (Number(currentSection) === lastSection) {
