@@ -137,10 +137,6 @@ export default class MHM {
           if (distanceFromTop - (sectionHeight * 0.25) <= window.scrollY) {
             currentSection = section.getAttribute('data-mhm-scroll-section')
           }
-
-          // DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG
-          // document.querySelector('.header__brand a').innerHTML = currentSection
-          // DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG-DEBUG
         })
         toggleArrows()
       },
